@@ -15,6 +15,7 @@ use Plack::Middleware::ExtractUriLanguage;
 use Plack::Builder;
 use HTTP::Request::Common;
 use Plack::Test;
+use Plack::Middleware::ExtractUriLanguage::Type ':all';
 
 ############################################################################
 
@@ -25,7 +26,7 @@ my $handler = builder {
     [
       200,
       [ 'Content-Type' => 'text/plain' ],
-      [ sprintf "%s\n%s", $env->{PATH_INFO} // '', $env->{LANGUAGE_TAG} // '' ],
+      [ sprintf "%s\n%s", $env->{$PATH_INFO_FIELD} // '', $env->{$DEFAULT_LANGUAGE_TAG_FIELD} // '' ],
     ];
     }
 };
@@ -37,7 +38,7 @@ my $handler_orig = builder {
     [
       200,
       [ 'Content-Type' => 'text/plain' ],
-      [ sprintf "%s", $env->{PATH_INFO_ORIG} // '' ],
+      [ sprintf "%s", $env->{$DEFAULT_PATH_INFO_ORIG_FIELD} // '' ],
     ];
     }
 };
@@ -86,7 +87,7 @@ my %test_orig = (
     {
       my $path = '/de/path';
       my $res  = $cb->( GET "http://localhost$path" );
-      is( $res->content, "$path", "original unmodified PATH_INFO" );
+      is( $res->content, "$path", "original unmodified $PATH_INFO_FIELD" );
     }
 
     return;

@@ -10,41 +10,73 @@ use warnings FATAL => 'all';
 use utf8;
 
 BEGIN {
-  our $VERSION = '0.001';
+  our $VERSION = '0.002';
 }
 
 use parent 'Plack::Middleware';
 use Plack::Util::Accessor qw(
   ExtractUriLanguageOrig
   ExtractUriLanguageTag
+  ExtractUriLanguageList
 );
+use Plack::Middleware::ExtractUriLanguage::Type ':all';
+use Carp 'croak';
+
+############################################################################
+sub prepare_app {
+  my ($self) = @_;
+  if ( my $list = $self->ExtractUriLanguageList ) {
+    croak sprintf 'ExtractUriLanguageList is not an array reference' if ref($list) ne 'ARRAY';
+    my $list_qm = join q{|}, map { quotemeta } @{$list};
+    $self->{extracturilanguage_list_qr} = [
+      qr{^/($list_qm)/?$},
+      qr{^/($list_qm)/(.*)$},
+    ];
+  }
+  return;
+}
 
 ############################################################################
 # Called on every reqeust.
 sub call {
   my ( $self, $env ) = @_;
   my $language_tag;
-  my $orig_name = $self->ExtractUriLanguageOrig || 'PATH_INFO_ORIG';
-  my $tag_name  = $self->ExtractUriLanguageTag  || 'LANGUAGE_TAG';
-  my $path_info = $env->{PATH_INFO}; # is "/en-us/some-site" when "http://example.com/en-us/some-site".
+  my $orig_name = $self->ExtractUriLanguageOrig || $DEFAULT_PATH_INFO_ORIG_FIELD;
+  my $tag_name  = $self->ExtractUriLanguageTag  || $DEFAULT_LANGUAGE_TAG_FIELD;
+  my $list      = $self->ExtractUriLanguageList || undef;
+  my $path_info = $env->{$PATH_INFO_FIELD}; # is "/en-us/some-site" when "http://example.com/en-us/some-site".
 
-  # The following conditions are true if their substitution regular expressions do anything.
-  # All characters after the identified language tag will be the new PATH_INFO.
-  # # "/en-us/some-site" will be "/some-site".
+  if ( $self->{extracturilanguage_list_qr} ) {
+    my ( $qr1, $qr2 ) = @{ $self->{extracturilanguage_list_qr} };
+    if ( $path_info =~ $qr1 || $path_info =~ $qr2 ) {
+      my ( $tag, $uri ) = ( $1, $2 );
+      {
+        no warnings 'uninitialized';
+        $uri = "/$uri";
+      }
+      $language_tag = $tag;
+      $path_info = $uri;
+    }
+  }
+  else {
+    # The following conditions are true if their substitution regular
+    # expressions do anything. All characters after the identified language
+    # tag will be the new PATH_INFO. "/en-us/some-site" will be "/some-site"
 
-  # language tag format: ISO 639-1 "-" ISO 3166 ALPHA-2 ("en-us", "en-gb")
-  if    ( $path_info =~ s{^/([[:alpha:]]{2}-[[:alpha:]]{2})/?$}{/} )     { $language_tag = $1 }
-  elsif ( $path_info =~ s{^/([[:alpha:]]{2}-[[:alpha:]]{2})(/.*)$}{$2} ) { $language_tag = $1 }
+    # language tag format: ISO 639-1 "-" ISO 3166 ALPHA-2 ("en-us", "en-gb")
+    if    ( $path_info =~ s{^/([[:alpha:]]{2}-[[:alpha:]]{2})/?$}{/} )     { $language_tag = $1 }
+    elsif ( $path_info =~ s{^/([[:alpha:]]{2}-[[:alpha:]]{2})(/.*)$}{$2} ) { $language_tag = $1 }
 
-  # language tag format: ISO 639-1 ("en")
-  elsif ( $path_info =~ s{^/([[:alpha:]]{2})/?$}{/} )     { $language_tag = $1 }
-  elsif ( $path_info =~ s{^/([[:alpha:]]{2})(/.*)$}{$2} ) { $language_tag = $1 }
+    # language tag format: ISO 639-1 ("en")
+    elsif ( $path_info =~ s{^/([[:alpha:]]{2})/?$}{/} )     { $language_tag = $1 }
+    elsif ( $path_info =~ s{^/([[:alpha:]]{2})(/.*)$}{$2} ) { $language_tag = $1 }
+  }
 
   # Manipulate environment only when a language tag was identified.
   if ($language_tag) {
-    $env->{$tag_name}  = $language_tag;      # The language tag wich was found.
-    $env->{$orig_name} = $env->{PATH_INFO};  # The original PATH_INFO.
-    $env->{PATH_INFO}  = $path_info;         # The new manupulated PATH_INFO.
+    $env->{$tag_name}        = $language_tag;             # The language tag wich was found.
+    $env->{$orig_name}       = $env->{$PATH_INFO_FIELD};  # The original PATH_INFO.
+    $env->{$PATH_INFO_FIELD} = $path_info;                # The new manupulated PATH_INFO.
   }
 
   # Dispatch request to application.
@@ -70,33 +102,51 @@ This documentation describes L<ExtractUriLanguage|Plack::Middleware::ExtractUriL
 
     # with Plack::Middleware::ExtractUriLanguage
     enable 'Plack::Middleware::ExtractUriLanguage',
-      ExtractUriLanguageOrig => 'PATH_INFO_ORIG',
-      ExtractUriLanguageTag  => 'LANGUAGE_TAG';
+      ExtractUriLanguageOrig => 'extracturilanguage.path_info',
+      ExtractUriLanguageTag  => 'extracturilanguage.language';
 
 =head1 DESCRIPTION
 
 L<ExtractUriLanguage|Plack::Middleware::ExtractUriLanguage> cuts off
 language tags out of the request's PATH_INFO to simplify
 internationalization route handlers. The extracted language tag will be
-stored within the environment variable C<LANGUAGE_TAG> (configurable). The
-original unmodified C<PATH_INFO> is additionaly saved within the environment
-variable C<PATH_INFO_ORIG> (configurable).
+stored within the environment variable C<extracturilanguage.language>
+(configurable). The original unmodified C<PATH_INFO> is additionaly saved
+within the environment variable C<extracturilanguage.path_info>
+(configurable).
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
 =head2 ExtractUriLanguageOrig
 
-    ExtractUriLanguageOrig  => 'PATH_INFO_ORIG';
+    ExtractUriLanguageOrig  => 'extracturilanguage.path_info';
 
 Environment variable name for the original unmodified C<PATH_INFO>. The
-default is "PATH_INFO_ORIG".
+default is "extracturilanguage.path_info".
 
 =head2 ExtractUriLanguageTag
 
-    ExtractUriLanguageTag  => 'LANGUAGE_TAG';
+    ExtractUriLanguageTag  => 'extracturilanguage.language';
 
 Environment variable name for the detected language tag. The default is
-"LANGUAGE_TAG".
+"extracturilanguage.language".
+
+=head2 ExtractUriLanguageList
+
+    ExtractUriLanguageList => [qw( de de-de en en-us en-gb )];
+
+Only detect and extract the language tags defined with this list. The
+default is C<undef>. When C<undef>
+L<ExtractUriLanguage|Plack::Middleware::ExtractUriLanguage> will try to
+guess the language tag based on the following formats:
+
+=over
+
+=item ISO 639-1 "-" ISO 3166 ALPHA-2 ( "de-de", "en-us", "en-gb" )
+
+=item ISO 639-1 ( "de", "en" )
+
+=back
 
 =head1 BUGS AND LIMITATIONS
 

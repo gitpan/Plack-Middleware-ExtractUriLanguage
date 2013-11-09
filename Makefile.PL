@@ -20,8 +20,12 @@ my %WriteMakefileArgs = (
   "LICENSE" => "restrictive",
   "NAME" => "Plack::Middleware::ExtractUriLanguage",
   "PREREQ_PM" => {
+    "Carp" => 0,
+    "Const::Fast" => 0,
+    "Exporter" => 0,
     "Plack::Middleware" => 0,
     "Plack::Util::Accessor" => 0,
+    "base" => 0,
     "parent" => 0
   },
   "TEST_REQUIRES" => {
@@ -31,7 +35,7 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "Test::NoWarnings" => 0
   },
-  "VERSION" => "0.001",
+  "VERSION" => "0.002",
   "test" => {
     "TESTS" => "t/*.t"
   }

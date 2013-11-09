@@ -26,8 +26,12 @@
       },
       "runtime" : {
          "requires" : {
+            "Carp" : "0",
+            "Const::Fast" : "0",
+            "Exporter" : "0",
             "Plack::Middleware" : "0",
             "Plack::Util::Accessor" : "0",
+            "base" : "0",
             "parent" : "0",
             "perl" : "5.010"
          }
@@ -45,7 +49,10 @@
    "provides" : {
       "Plack::Middleware::ExtractUriLanguage" : {
          "file" : "lib/Plack/Middleware/ExtractUriLanguage.pm",
-         "version" : "0.001"
+         "version" : "0.002"
+      },
+      "Plack::Middleware::ExtractUriLanguage::Type" : {
+         "file" : "lib/Plack/Middleware/ExtractUriLanguage/Type.pm"
       }
    },
    "release_status" : "unstable",
@@ -61,6 +68,6 @@
          "web" : "https://github.com/burnersk/Plack-Middleware-ExtractUriLanguage"
       }
    },
-   "version" : "0.001"
+   "version" : "0.002"
 }
 

@@ -1,5 +1,9 @@
+requires "Carp" => "0";
+requires "Const::Fast" => "0";
+requires "Exporter" => "0";
 requires "Plack::Middleware" => "0";
 requires "Plack::Util::Accessor" => "0";
+requires "base" => "0";
 requires "parent" => "0";
 requires "perl" => "5.010";
 
