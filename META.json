@@ -26,7 +26,6 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : "0",
             "Const::Fast" : "0",
             "Exporter" : "0",
             "Plack::Middleware" : "0",
@@ -38,18 +37,20 @@
       },
       "test" : {
          "requires" : {
+            "English" : "0",
             "HTTP::Request::Common" : "0",
             "Plack::Builder" : "0",
             "Plack::Test" : "0",
             "Test::More" : "0",
-            "Test::NoWarnings" : "0"
+            "Test::NoWarnings" : "0",
+            "Test::Warn" : "0"
          }
       }
    },
    "provides" : {
       "Plack::Middleware::ExtractUriLanguage" : {
          "file" : "lib/Plack/Middleware/ExtractUriLanguage.pm",
-         "version" : "0.002"
+         "version" : "0.003"
       },
       "Plack::Middleware::ExtractUriLanguage::Type" : {
          "file" : "lib/Plack/Middleware/ExtractUriLanguage/Type.pm"
@@ -68,6 +69,6 @@
          "web" : "https://github.com/burnersk/Plack-Middleware-ExtractUriLanguage"
       }
    },
-   "version" : "0.002"
+   "version" : "0.003"
 }
 

@@ -3,11 +3,13 @@ abstract: "Cuts off language tags out of the request's PATH_INFO to simplify int
 author:
   - 'BURNERSK <burnersk@cpan.org>'
 build_requires:
+  English: 0
   HTTP::Request::Common: 0
   Plack::Builder: 0
   Plack::Test: 0
   Test::More: 0
   Test::NoWarnings: 0
+  Test::Warn: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 1
@@ -23,11 +25,10 @@ no_index:
 provides:
   Plack::Middleware::ExtractUriLanguage:
     file: lib/Plack/Middleware/ExtractUriLanguage.pm
-    version: 0.002
+    version: 0.003
   Plack::Middleware::ExtractUriLanguage::Type:
     file: lib/Plack/Middleware/ExtractUriLanguage/Type.pm
 requires:
-  Carp: 0
   Const::Fast: 0
   Exporter: 0
   Plack::Middleware: 0
@@ -39,4 +40,4 @@ resources:
   bugtracker: https://github.com/burnersk/Plack-Middleware-ExtractUriLanguage/issues
   homepage: http://p3rl.org/Plack::Middleware::ExtractUriLanguage
   repository: git://github.com/burnersk/Plack-Middleware-ExtractUriLanguage.git
-version: 0.002
+version: 0.003

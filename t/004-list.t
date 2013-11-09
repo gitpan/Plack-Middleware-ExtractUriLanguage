@@ -7,9 +7,11 @@
 use strict;
 use warnings FATAL => 'all';
 use utf8;
+use English '-no_match_vars';
 
-use Test::More tests => 1 + 4;
+use Test::More tests => 1 + 5;
 use Test::NoWarnings;
+use Test::Warn;
 
 use Plack::Middleware::ExtractUriLanguage;
 use Plack::Builder;
@@ -58,6 +60,22 @@ use Plack::Middleware::ExtractUriLanguage::Type ':all';
 
   test_psgi %test;
 }
+
+############################################################################
+
+warning_like(
+  sub {
+    eval {
+      builder {
+        enable 'Plack::Middleware::ExtractUriLanguage', (
+          ExtractUriLanguageList => 'invalid',
+          );
+      };
+    } or warn $EVAL_ERROR;
+  },
+  qr/ExtractUriLanguageList is not an array reference/,
+  'Invalid ExtractUriLanguageList list',
+);
 
 ############################################################################
 1;

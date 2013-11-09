@@ -10,7 +10,7 @@ use warnings FATAL => 'all';
 use utf8;
 
 BEGIN {
-  our $VERSION = '0.002';
+  our $VERSION = '0.003';
 }
 
 use parent 'Plack::Middleware';
@@ -20,19 +20,33 @@ use Plack::Util::Accessor qw(
   ExtractUriLanguageList
 );
 use Plack::Middleware::ExtractUriLanguage::Type ':all';
-use Carp 'croak';
 
 ############################################################################
+# Called once.
 sub prepare_app {
   my ($self) = @_;
+
+  # Precompose language tag regex.
   if ( my $list = $self->ExtractUriLanguageList ) {
-    croak sprintf 'ExtractUriLanguageList is not an array reference' if ref($list) ne 'ARRAY';
-    my $list_qm = join q{|}, map { quotemeta } @{$list};
+    if ( defined $list && ref($list) ne 'ARRAY' ) {
+      my ( $package, $filename, $line ) = caller(6);
+      die sprintf "ExtractUriLanguageList is not an array reference at %s line %s.\n", $filename, $line;
+    }
+    elsif ( defined $list ) {
+      my $list_qm = join q{|}, map { quotemeta } @{$list};
+      $self->{extracturilanguage_list_qr} = [
+        qr{^/($list_qm)/?$},
+        qr{^/($list_qm)/(.*)$},
+      ];
+    }
+  }
+  if ( !$self->{extracturilanguage_list_qr} ) {
     $self->{extracturilanguage_list_qr} = [
-      qr{^/($list_qm)/?$},
-      qr{^/($list_qm)/(.*)$},
+      qr{^/([[:alpha:]]{2}(?:\-[[:alpha:]]{2})?)/?$},
+      qr{^/([[:alpha:]]{2}(?:\-[[:alpha:]]{2})?)/(.*)$},
     ];
   }
+
   return;
 }
 
@@ -46,30 +60,15 @@ sub call {
   my $list      = $self->ExtractUriLanguageList || undef;
   my $path_info = $env->{$PATH_INFO_FIELD}; # is "/en-us/some-site" when "http://example.com/en-us/some-site".
 
-  if ( $self->{extracturilanguage_list_qr} ) {
-    my ( $qr1, $qr2 ) = @{ $self->{extracturilanguage_list_qr} };
-    if ( $path_info =~ $qr1 || $path_info =~ $qr2 ) {
-      my ( $tag, $uri ) = ( $1, $2 );
-      {
-        no warnings 'uninitialized';
-        $uri = "/$uri";
-      }
-      $language_tag = $tag;
-      $path_info = $uri;
+  my ( $qr1, $qr2 ) = @{ $self->{extracturilanguage_list_qr} };
+  if ( $path_info =~ $qr1 || $path_info =~ $qr2 ) {
+    my ( $tag, $uri ) = ( $1, $2 );
+    {
+      no warnings 'uninitialized';
+      $uri = "/$uri";
     }
-  }
-  else {
-    # The following conditions are true if their substitution regular
-    # expressions do anything. All characters after the identified language
-    # tag will be the new PATH_INFO. "/en-us/some-site" will be "/some-site"
-
-    # language tag format: ISO 639-1 "-" ISO 3166 ALPHA-2 ("en-us", "en-gb")
-    if    ( $path_info =~ s{^/([[:alpha:]]{2}-[[:alpha:]]{2})/?$}{/} )     { $language_tag = $1 }
-    elsif ( $path_info =~ s{^/([[:alpha:]]{2}-[[:alpha:]]{2})(/.*)$}{$2} ) { $language_tag = $1 }
-
-    # language tag format: ISO 639-1 ("en")
-    elsif ( $path_info =~ s{^/([[:alpha:]]{2})/?$}{/} )     { $language_tag = $1 }
-    elsif ( $path_info =~ s{^/([[:alpha:]]{2})(/.*)$}{$2} ) { $language_tag = $1 }
+    $language_tag = $tag;
+    $path_info    = $uri;
   }
 
   # Manipulate environment only when a language tag was identified.
@@ -96,7 +95,11 @@ Plack::Middleware::ExtractUriLanguage - Cuts off language tags out of the reques
 
 =head1 VERSION
 
-This documentation describes L<ExtractUriLanguage|Plack::Middleware::ExtractUriLanguage> within version 0.001.
+This documentation describes
+L<ExtractUriLanguage|Plack::Middleware::ExtractUriLanguage> within version
+0.003.
+
+B<Current development state: ALPHA release>
 
 =head1 SYNOPSIS
 

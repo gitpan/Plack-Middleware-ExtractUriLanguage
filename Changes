@@ -2,9 +2,51 @@
 Changes from 2003-11-12 00:00:00 +0000 to present.
 ==================================================
 
--------------------------------------
-version  at 2013-11-09 11:06:28 +0000
--------------------------------------
+------------------------------------------
+version 0.003 at 2013-11-09 12:09:08 +0000
+------------------------------------------
+
+  Change: 417d52a867e682f841a5491cf1a69a09a0252e02
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 13:07:26 +0000
+
+    Increment version 
+
+  Change: 8447e5fe65dff7a9fa08bc0d20a815a108c3553a
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 13:07:14 +0000
+
+    Fix POD version 
+
+  Change: abb0a104a6b623b8452a360af5c3ba0432364167
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 13:05:24 +0000
+
+    Increment version 
+
+  Change: cc8c3e39f866c4aba285da4bad38f2544a3eaa5a
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 13:00:50 +0000
+
+    Precompose/-compile language tag regex once. 
+
+  Change: a46d349fe7da40c1812312535a07b6f9b954b7c5
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 12:49:02 +0000
+
+    Fix ChangelogFromGit version regex 
+
+  Change: 5370f457be419abefb72c9d73a17c0becb9f53f3
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 12:42:13 +0000
+
+    Croak when getting an invalid ExtractUriLanguageList list 
+
+  Change: 048be2319f3e9222287c387036221a6d57b83ba0
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 12:19:38 +0000
+
+    Increment version 
 
   Change: ae31aaad4eb4fea10ba2c0626e781287dec449d5
   Author: BURNERSK <burnersk@cpan.org>
@@ -38,10 +80,6 @@ version  at 2013-11-09 11:06:28 +0000
   Date : 2013-11-08 16:02:36 +0000
 
     Increment version 
-
--------------------------------------
-version  at 2013-11-08 14:06:02 +0000
--------------------------------------
 
   Change: 5a5d3597696c0767b1e77020cadf9c9c61ee8ba5
   Author: BURNERSK <burnersk@cpan.org>
