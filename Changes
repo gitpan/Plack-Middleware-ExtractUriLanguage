@@ -3,8 +3,32 @@ Changes from 2003-11-12 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.003 at 2013-11-09 12:09:08 +0000
+version 0.004 at 2013-11-09 13:59:19 +0000
 ------------------------------------------
+
+  Change: 6facf90089b3316600d15960e138242e8a42ac9a
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 14:59:00 +0000
+
+    Update POD version 
+
+  Change: 79e5ce540a2de7b47fb9cf6bd40794b8e9a71f21
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 14:57:26 +0000
+
+    Enter testing stage (beta) 
+
+  Change: 223d53cf48a3da664ceca546efa2d2e1ff02ffab
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 14:56:00 +0000
+
+    Configure version within dist.ini 
+
+  Change: e5d2ef24cafa5d2696df0b510c5f493be434dc72
+  Author: BURNERSK <burnersk@cpan.org>
+  Date : 2013-11-09 13:34:43 +0000
+
+    Change license from Restricted to Artistic 2.0 
 
   Change: 417d52a867e682f841a5491cf1a69a09a0252e02
   Author: BURNERSK <burnersk@cpan.org>

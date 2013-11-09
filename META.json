@@ -6,7 +6,7 @@
    "dynamic_config" : 1,
    "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132830",
    "license" : [
-      "restricted"
+      "artistic_2"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -37,7 +37,6 @@
       },
       "test" : {
          "requires" : {
-            "English" : "0",
             "HTTP::Request::Common" : "0",
             "Plack::Builder" : "0",
             "Plack::Test" : "0",
@@ -50,13 +49,13 @@
    "provides" : {
       "Plack::Middleware::ExtractUriLanguage" : {
          "file" : "lib/Plack/Middleware/ExtractUriLanguage.pm",
-         "version" : "0.003"
+         "version" : "0.004"
       },
       "Plack::Middleware::ExtractUriLanguage::Type" : {
          "file" : "lib/Plack/Middleware/ExtractUriLanguage/Type.pm"
       }
    },
-   "release_status" : "unstable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "mailto" : "burnersk@cpan.org",
@@ -69,6 +68,6 @@
          "web" : "https://github.com/burnersk/Plack-Middleware-ExtractUriLanguage"
       }
    },
-   "version" : "0.003"
+   "version" : "0.004"
 }
 

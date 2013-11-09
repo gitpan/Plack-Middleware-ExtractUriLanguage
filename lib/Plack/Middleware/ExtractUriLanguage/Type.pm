@@ -1,8 +1,11 @@
 #
 # This file is part of Plack-Middleware-ExtractUriLanguage
 #
-# This software is copyright (c) 2013 by BURNERSK.  No
-# license is granted to other entities.
+# This software is Copyright (c) 2013 by BURNERSK.
+#
+# This is free software, licensed under:
+#
+#   The Artistic License 2.0 (GPL Compatible)
 #
 package Plack::Middleware::ExtractUriLanguage::Type;
 use strict;

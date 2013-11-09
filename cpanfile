@@ -7,7 +7,6 @@ requires "parent" => "0";
 requires "perl" => "5.010";
 
 on 'test' => sub {
-  requires "English" => "0";
   requires "HTTP::Request::Common" => "0";
   requires "Plack::Builder" => "0";
   requires "Plack::Test" => "0";

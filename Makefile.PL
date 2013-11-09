@@ -17,7 +17,7 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Plack-Middleware-ExtractUriLanguage",
   "EXE_FILES" => [],
-  "LICENSE" => "restrictive",
+  "LICENSE" => "artistic_2",
   "NAME" => "Plack::Middleware::ExtractUriLanguage",
   "PREREQ_PM" => {
     "Const::Fast" => 0,
@@ -28,7 +28,6 @@ my %WriteMakefileArgs = (
     "parent" => 0
   },
   "TEST_REQUIRES" => {
-    "English" => 0,
     "HTTP::Request::Common" => 0,
     "Plack::Builder" => 0,
     "Plack::Test" => 0,
@@ -36,7 +35,7 @@ my %WriteMakefileArgs = (
     "Test::NoWarnings" => 0,
     "Test::Warn" => 0
   },
-  "VERSION" => "0.003",
+  "VERSION" => "0.004",
   "test" => {
     "TESTS" => "t/*.t"
   }

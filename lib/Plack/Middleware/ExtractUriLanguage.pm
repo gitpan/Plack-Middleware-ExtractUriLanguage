@@ -1,8 +1,11 @@
 #
 # This file is part of Plack-Middleware-ExtractUriLanguage
 #
-# This software is copyright (c) 2013 by BURNERSK.  No
-# license is granted to other entities.
+# This software is Copyright (c) 2013 by BURNERSK.
+#
+# This is free software, licensed under:
+#
+#   The Artistic License 2.0 (GPL Compatible)
 #
 package Plack::Middleware::ExtractUriLanguage;
 use strict;
@@ -10,7 +13,7 @@ use warnings FATAL => 'all';
 use utf8;
 
 BEGIN {
-  our $VERSION = '0.003';
+  our $VERSION = '0.004'; # VERSION
 }
 
 use parent 'Plack::Middleware';
@@ -97,9 +100,9 @@ Plack::Middleware::ExtractUriLanguage - Cuts off language tags out of the reques
 
 This documentation describes
 L<ExtractUriLanguage|Plack::Middleware::ExtractUriLanguage> within version
-0.003.
+0.004.
 
-B<Current development state: ALPHA release>
+B<Current development state: BETA release>
 
 =head1 SYNOPSIS
 
@@ -164,7 +167,10 @@ BURNERSK E<lt>burnersk@cpan.orgE<gt>
 
 This file is part of Plack-Middleware-ExtractUriLanguage
 
-This software is copyright (c) 2013 by BURNERSK.  No
-license is granted to other entities.
+This software is Copyright (c) 2013 by BURNERSK.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0 (GPL Compatible)
 
 =cut
